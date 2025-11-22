@@ -18,28 +18,48 @@ export default function Home() {
       icon: LineChart,
       title: "Strategic Planning",
       description: "Transform your vision into actionable strategies that drive sustainable growth and competitive advantage in today's dynamic market.",
-      gradient: "from-blue-600 to-cyan-500"
+      gradient: "from-blue-600 to-cyan-500",
+      image: "https://www.bls.gov/careeroutlook/2018/images/blacks-in-the-labor-force_cover.jpg"
     },
     {
       id: 2,
       icon: Users,
       title: "Non-Profit Advisory",
       description: "Specialized guidance for mission-driven organizations on compliance, fundraising, and maximizing social impact.",
-      gradient: "from-purple-600 to-pink-500"
+      gradient: "from-purple-600 to-pink-500",
+      image: "https://images.unsplash.com/photo-1527689368864-3a821dbccc34?auto=format&fit=crop&w=1200&q=80"
     },
     {
       id: 3,
       icon: TrendingUp,
       title: "Technology Edge",
       description: "Harness cutting-edge digital solutions to streamline operations, enhance efficiency, and stay ahead of industry trends.",
-      gradient: "from-indigo-600 to-blue-500"
+      gradient: "from-indigo-600 to-blue-500",
+      image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1200&q=80"
     },
     {
       id: 4,
       icon: Briefcase,
       title: "Accounting Excellence",
       description: "Comprehensive financial services ensuring accuracy, regulatory compliance, and strategic financial clarity.",
-      gradient: "from-blue-700 to-indigo-600"
+      gradient: "from-emerald-500 to-teal-400",
+      image: "https://images.unsplash.com/photo-1554224154-22dec7ec8818?auto=format&fit=crop&w=1200&q=80"
+    },
+    {
+      id: 5,
+      icon: Briefcase,
+      title: "Emerging Business & Startup Advisory Services",
+      description: "",
+      gradient: "from-rose-500 to-orange-400",
+      image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80"
+    },
+    {
+      id: 6,
+      icon: Briefcase,
+      title: "Grant Writing Services",
+      description: "Comprehensive financial services ensuring accuracy, regulatory compliance, and strategic financial clarity.",
+      gradient: "from-yellow-500 to-amber-400",
+      image: "https://images.pexels.com/photos/6694543/pexels-photo-6694543.jpeg?auto=format&fit=crop&w=1200&q=80"
     }
   ];
 
@@ -49,6 +69,9 @@ export default function Home() {
     { number: "98%", label: "Success Rate", icon: Target },
     { number: "24/7", label: "Support", icon: Sparkles }
   ];
+
+  // changed code: apply same background image to service cards with ids 1-6
+  const imageBgIds = [1, 2, 3, 4, 5, 6];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
@@ -281,23 +304,54 @@ export default function Home() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-8">
-            {services.map((service, index) => (
-              <div
-                key={service.id}
-                className="group glass rounded-[2.5rem] p-8 md:p-10 hover-scale cursor-pointer glow-hover"
-                onMouseEnter={() => setActiveService(index)}
-              >
-                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${service.gradient} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
-                  <service.icon className="w-8 h-8 text-white" />
+            {services.map((service, index) => {
+              const useImage = !!service.image;
+              return (
+                <div
+                  key={service.id}
+                  className={`group rounded-[2.5rem] p-8 md:p-10 hover-scale cursor-pointer glow-hover transition-shadow duration-300 ${
+                    useImage ? 'relative overflow-hidden shadow-md hover:shadow-2xl' : 'glass shadow-sm'
+                  }`}
+                  onMouseEnter={() => setActiveService(index)}
+                  style={
+                    useImage
+                      ? {
+                          backgroundImage: `url('${service.image}')`,
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center',
+                          backgroundRepeat: 'no-repeat'
+                        }
+                      : undefined
+                  }
+                >
+                  {useImage && (
+                    // dark overlay to keep text readable
+                    <div className="absolute inset-0 bg-black/45 rounded-[2.5rem] pointer-events-none"></div>
+                  )}
+
+                  {/* Decorative gradient stripe (replaces icon) */}
+                  <div className="relative z-10">
+                    <div className={`mb-6 w-20 h-1.5 rounded-full bg-gradient-to-r ${service.gradient} opacity-95`} />
+
+                    <h4 className={`text-2xl md:text-3xl font-bold mb-4 ${useImage ? 'text-white' : 'text-[#0a1f44]'}`}>
+                      {service.title}
+                    </h4>
+                    <p className={`${useImage ? 'text-blue-100' : 'text-slate-600'} leading-relaxed text-lg mb-6`}>
+                      {service.description || 'Learn how we can help — tailored solutions for your needs.'}
+                    </p>
+
+                    <div
+                      className={`inline-flex items-center gap-2 px-4 py-2 rounded-full font-semibold transition-all ${
+                        useImage ? 'bg-white/10 text-white hover:bg-white/20' : 'bg-white text-[#0a1f44] hover:bg-slate-50'
+                      }`}
+                    >
+                      <span>Learn More</span>
+                      <ArrowRight className={`w-4 h-4 ${useImage ? 'text-white' : 'text-[#0a1f44]'}`} />
+                    </div>
+                  </div>
                 </div>
-                <h4 className="text-2xl md:text-3xl font-bold text-[#0a1f44] mb-4">{service.title}</h4>
-                <p className="text-slate-600 leading-relaxed text-lg mb-6">{service.description}</p>
-                <div className="flex items-center gap-2 text-blue-600 font-semibold group-hover:gap-4 transition-all">
-                  <span>Learn More</span>
-                  <ArrowRight className="w-5 h-5" />
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -369,50 +423,96 @@ export default function Home() {
       {/* CTA Section */}
       <section id="contact" className="py-20 md:py-32 relative">
         <div className="max-w-6xl mx-auto px-6">
-          <div className="relative glass-dark rounded-[3rem] p-12 md:p-16 overflow-hidden">
-            <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500 rounded-full filter blur-[150px] opacity-30"></div>
-            <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-500 rounded-full filter blur-[150px] opacity-20"></div>
-            
-            <div className="relative text-center mb-16">
-              <h3 className="text-5xl md:text-6xl font-black text-white mb-6">
-                Ready to Transform<br />Your Business?
-              </h3>
-              <p className="text-xl text-blue-100 max-w-2xl mx-auto">
-                Let's discuss how we can help you achieve your goals
-              </p>
-            </div>
+          <div className="relative glass-dark rounded-[3rem] p-8 md:p-12 overflow-hidden">
+            <div className="absolute top-0 right-0 w-80 h-80 bg-blue-500 rounded-full filter blur-[120px] opacity-30" />
+            <div className="absolute bottom-0 left-0 w-80 h-80 bg-purple-500 rounded-full filter blur-[120px] opacity-20" />
 
-            <div className="relative grid md:grid-cols-2 gap-6 mb-12">
-              <a href="tel:+9015085027" className="glass rounded-2xl p-8 hover-scale group">
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
-                    <Phone className="w-8 h-8 text-white" />
-                  </div>
-                  <div className="text-left">
-                    <p className="text-sm font-semibold text-blue-200 mb-1">Call Us Now</p>
-                    <p className="text-2xl font-bold text-white">+901-508-5027</p>
+            <div className="relative grid md:grid-cols-2 gap-8 items-start">
+              {/* Left: Contact info */}
+              <div className="text-white">
+                <h3 className="text-4xl md:text-5xl font-black mb-4">
+                  Let's Talk Business
+                </h3>
+                <p className="text-blue-100 mb-6">
+                  Partner with JTH Management to transform your strategy and operations. Use the form to send project details or contact us directly via phone or email.
+                </p>
+
+                <div className="space-y-4">
+                  <a href="tel:+19015085027" className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
+                      <Phone className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-blue-200">Call Us</p>
+                      <p className="font-bold text-white">+1 (901) 508-5027</p>
+                    </div>
+                  </a>
+
+                  <a href="mailto:info@jthmsinc.com" className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                      <Mail className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-blue-200">Email</p>
+                      <p className="font-bold text-white break-all">info@jthmsinc.com</p>
+                    </div>
+                  </a>
+                </div>
+
+                <p className="mt-6 text-sm text-blue-200">
+                  Typical response time: within 24 business hours. For urgent matters please call.
+                </p>
+              </div>
+
+              {/* Right: Contact form */}
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const data = Object.fromEntries(new FormData(e.target));
+                  console.log('contact form submission', data);
+                  alert('Thank you — your message was sent. (dev only)');
+                  e.currentTarget.reset();
+                }}
+                className="bg-white rounded-2xl p-6 md:p-8 shadow-md"
+                aria-label="Contact form"
+              >
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <label className="flex flex-col">
+                    <span className="text-sm font-medium text-slate-700 mb-1">Full name</span>
+                    <input name="name" type="text" required className="px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-300" placeholder="Jane Doe" />
+                  </label>
+
+                  <label className="flex flex-col">
+                    <span className="text-sm font-medium text-slate-700 mb-1">Email</span>
+                    <input name="email" type="email" required className="px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-300" placeholder="you@company.com" />
+                  </label>
+                </div>
+
+                <div className="mt-4">
+                  <label className="flex flex-col">
+                    <span className="text-sm font-medium text-slate-700 mb-1">Phone (optional)</span>
+                    <input name="phone" type="tel" className="px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-300" placeholder="+1 (___) ___-____" />
+                  </label>
+                </div>
+
+                <div className="mt-4">
+                  <label className="flex flex-col">
+                    <span className="text-sm font-medium text-slate-700 mb-1">Message</span>
+                    <textarea name="message" required rows={5} className="px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-300 resize-none" placeholder="Brief description of your needs, timeline and budget." />
+                  </label>
+                </div>
+
+                <div className="mt-6 flex items-center justify-between gap-4">
+                  <button type="submit" className="inline-flex items-center gap-3 px-6 py-3 rounded-2xl bg-gradient-to-br from-[#0a1f44] to-blue-600 text-white font-semibold hover:scale-[1.02] transition-transform">
+                    Send Message
+                    <ArrowRight className="w-5 h-5 text-white" />
+                  </button>
+
+                  <div className="text-sm text-slate-500">
+                    By submitting you agree to our <a href="#privacy" className="text-blue-600 font-medium">privacy policy</a>.
                   </div>
                 </div>
-              </a>
-
-              <a href="mailto:jthmas@jth.com" className="glass rounded-2xl p-8 hover-scale group">
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
-                    <Mail className="w-8 h-8 text-white" />
-                  </div>
-                  <div className="text-left">
-                    <p className="text-sm font-semibold text-blue-200 mb-1">Email Us</p>
-                    <p className="text-xl font-bold text-white break-all">jthmas@jth.com</p>
-                  </div>
-                </div>
-              </a>
-            </div>
-
-            <div className="relative text-center">
-              <button className="px-12 py-5 rounded-2xl bg-white text-[#0a1f44] font-bold text-xl hover:scale-105 transition-all inline-flex items-center gap-3">
-                Schedule a Consultation
-                <ArrowRight className="w-6 h-6" />
-              </button>
+              </form>
             </div>
           </div>
         </div>
